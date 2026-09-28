@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../components/container/Container";
 import PostCard from '../components/PostCard';
 import AppwriteService from '../appwrite/config'
@@ -28,4 +28,4 @@ function AllPosts() {
     )
 }
 
-export default AllPosts
+export default AllPosts;
