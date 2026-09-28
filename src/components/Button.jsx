@@ -1,21 +1,18 @@
-function Button({
-    children,
-    type = 'button',
-    bgColor = 'btn-primary',
-    textColor = 'text-white',
-    className = '',
-    ...props
-}){
-    const isCustomBg = bgColor.startsWith('bg-');
-    const baseClass = isCustomBg
-        ? `btn-3d ${bgColor} ${textColor} ${className}`
-        : `btn-3d ${bgColor} ${textColor} ${className}`;
+import React, { Children } from "react";
 
-    return (
-        <button type={type} className={`cursor-pointer ${baseClass}`} {...props}>
+function Button(
+   { children,
+    type='button',
+    bgColor='bg-blue-600',
+    textColor='text-white',
+    className='',
+    ...props}
+){
+    return(
+        <button className={`cursor-pointer px-4 py-2 rounded-lg ${bgColor} ${textColor} ${className}`} {...props}>
             {children}
         </button>
-    );
+    )
 }
 
-export default Button;
+export default Button
