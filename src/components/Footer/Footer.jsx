@@ -23,7 +23,7 @@ const SOCIALS = ['X', 'GitHub', 'Dribbble', 'LinkedIn']
 
 function Footer() {
   return (
-    <footer className="hairline relative overflow-hidden border-t border-white/10 bg-[#07080f]/80 pt-20 backdrop-blur-xl">
+    <footer id="site-footer" className="hairline relative overflow-hidden border-t border-white/10 bg-[#07080f]/80 pt-20 backdrop-blur-xl">
       <div className="orb orb-violet" style={{ width: '22rem', height: '22rem', top: '-8rem', right: '-6rem', opacity: 0.28 }} />
       <div className="orb orb-cyan" style={{ width: '18rem', height: '18rem', bottom: '-8rem', left: '-5rem', opacity: 0.22 }} />
 

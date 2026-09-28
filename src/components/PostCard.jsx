@@ -33,7 +33,7 @@ function PostCard({ $id, title, content, featuredImage, $createdAt }) {
         <span className="spotlight" />
 
         <div className="relative overflow-hidden rounded-t-[21px]">
-          <div className="aspect-[16/10] w-full overflow-hidden bg-gradient-to-br from-violet-600/40 via-slate-800 to-cyan-500/30">
+          <div className="aspect-[16/10] w-full overflow-hidden bg-gradient-to-br from-violet-500/70 via-fuchsia-500/45 to-cyan-400/60">
             {preview ? (
               <img
                 src={preview}
@@ -57,7 +57,7 @@ function PostCard({ $id, title, content, featuredImage, $createdAt }) {
           </span>
         </div>
 
-        <div className="relative flex flex-1 flex-col p-5" style={{ transform: "translateZ(38px)" }}>
+        <div className="relative flex flex-1 flex-col p-5">
           <h2 className="font-display text-lg font-bold leading-snug text-white transition-colors duration-300 group-hover:text-cyan-200">
             {title}
           </h2>

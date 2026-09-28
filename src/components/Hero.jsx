@@ -72,7 +72,7 @@ function Hero() {
   return (
     <section
       ref={sceneRef}
-      className="scene-tilt relative isolate overflow-hidden min-h-[92vh] flex items-center py-24 noise"
+      className="scene-tilt relative isolate overflow-hidden min-h-[min(88vh,880px)] flex items-center py-24 noise"
       style={{ "--px": 0, "--py": 0 }}
     >
       <div className="orb orb-violet parallax-layer" style={{ "--depth": 26, width: "34rem", height: "34rem", top: "-8rem", left: "-6rem" }} />
@@ -98,8 +98,8 @@ function Hero() {
               className="word-stage font-display mt-8 text-5xl font-extrabold leading-[0.95] sm:text-6xl lg:text-7xl"
               style={{ transformStyle: "preserve-3d" }}
             >
-              <span className="block">{LINE_ONE.map((w) => renderWord(w))}</span>
-              <span className="block">{LINE_TWO.map((w) => renderWord(w, true))}</span>
+              <span className="flex flex-wrap gap-x-[0.26em]">{LINE_ONE.map((w) => renderWord(w))}</span>
+              <span className="flex flex-wrap gap-x-[0.26em]">{LINE_TWO.map((w) => renderWord(w, true))}</span>
             </h1>
 
             <p
@@ -156,7 +156,7 @@ function Hero() {
               </div>
             </div>
 
-            <div className="parallax-layer absolute -left-2 bottom-24 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-xs font-semibold text-amber-200 backdrop-blur-xl float-slower" style={{ "--depth": 46 }}>
+            <div className="parallax-layer absolute right-0 bottom-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-xs font-semibold text-amber-200 backdrop-blur-xl float-slower" style={{ "--depth": 46 }}>
               ★ 4.9 average rating
             </div>
             <div className="parallax-layer absolute right-4 top-6 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-xs font-semibold text-cyan-200 backdrop-blur-xl float-fast" style={{ "--depth": 50 }}>

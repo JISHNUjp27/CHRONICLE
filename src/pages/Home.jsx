@@ -121,6 +121,21 @@ function Home() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    if (!window.location.hash) return undefined;
+    const timer = window.setTimeout(() => {
+      try {
+        document.querySelector(window.location.hash)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      } catch {
+        /* invalid selector in hash — ignore */
+      }
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const stats = STATS.map((stat, index) =>
     index === 0 ? { ...stat, value: posts.length } : stat
   );
