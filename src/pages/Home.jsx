@@ -1,32 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, PostCard } from "../components";
-import appwriteService from '../appwrite/config'
+import Hero from "../components/Hero";
+import Reveal from "../components/Reveal";
+import useReveal from "../hooks/useReveal";
+import appwriteService from "../appwrite/config";
+import { getAllMergedPosts } from "../data/showcasePosts";
 
-function Home() {
-    const [posts, setPosts] = useState([])
+const TOPICS = [
+  "All",
+  "Engineering",
+  "Design",
+  "AI",
+  "Product",
+  "Culture",
+  "Startups",
+];
 
-    useEffect(() => {
-        appwriteService.getPosts().then((posts) => {
-            if (posts) {
-                setPosts(posts.documents)
-            }
-        })
-    }, [])
-    if (posts.length === 0) {
-        return (
-            <div className="w-full py-8 mt-4 text-center">
-                <Container>
-                    <div className="flex flex-wrap">
-                        <div className="p-2 w-full">
-                            <h1 className="text-2xl font-bold hover:text-gray-500">
-                                Login to read posts
-                            </h1>
-                        </div>
-                    </div>
-                </Container>
-            </div>
-        )
+const STATS = [
+  { label: "Stories live", value: 0, suffix: "+", from: 0 },
+  { label: "Writers", value: 2400, suffix: "+", from: 0 },
+  { label: "Avg. read", value: 4, suffix: " min", from: 0 },
+  { label: "Reader rating", value: 4.9, suffix: "/5", from: 0, decimals: 1 },
+];
+
+function CountUp({ to, suffix = "", decimals = 0, duration = 1600 }) {
+  const [ref, visible] = useReveal({ threshold: 0.4 });
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (!visible) return undefined;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setValue(to);
+      return undefined;
     }
 
     let raf = 0;
