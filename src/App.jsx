@@ -22,7 +22,7 @@ function App() {
       }
     })
     .finally(() => setLoading(false))
-  }, [])
+  }, [dispatch])
 
   return !loading ? (
     <div className='relative min-h-screen flex flex-wrap content-between bg-[#05060c] text-slate-100 selection:bg-violet-500/40'>
