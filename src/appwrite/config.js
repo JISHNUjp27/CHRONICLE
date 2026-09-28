@@ -1,26 +1,31 @@
 import conf from "../conf/conf";
-
 import { Client, ID, Databases, Query, Storage } from "appwrite";
 
 export class Service {
-    Client = new Client()
+    Client = new Client();
     databases;
     bucket;
+
     constructor() {
         this.Client
             .setEndpoint(conf.appwriteUrl)
             .setProject(conf.appwriteProjectId);
 
         this.databases = new Databases(this.Client);
-        this.bucket = new Storage(this.Client)
-
+        this.bucket = new Storage(this.Client);
     }
+
     async createPost({ title, slug, content, featuredImage, status, userId }) {
         try {
+            const safeSlug = (slug && typeof slug === "string")
+                ? slug.trim().toLowerCase().replace(/[^a-zA-Z0-9._-]/g, '-').replace(/^-+|-+$/g, '').slice(0, 36)
+                : "";
+            const documentId = safeSlug || ID.unique();
+
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                slug,
+                documentId,
                 {
                     title,
                     content,
@@ -28,27 +33,30 @@ export class Service {
                     status,
                     userId
                 }
-            )
+            );
         } catch (error) {
-            console.log("Appwrite Service :: createPost :: error", error)
+            console.error("Appwrite Service :: createPost :: error", error);
+            throw error;
         }
     }
 
-    async updatePost(slug, { title, content, featuredImage, status, }) {
+    async updatePost(slug, { title, content, featuredImage, status }) {
         try {
+            const safeSlug = String(slug).slice(0, 36);
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                slug,
+                safeSlug,
                 {
                     title,
                     content,
                     featuredImage,
                     status,
                 }
-            )
+            );
         } catch (error) {
-            console.log("Appwrite Service :: updatePost :: error", error)
+            console.error("Appwrite Service :: updatePost :: error", error);
+            throw error;
         }
     }
 
@@ -58,11 +66,11 @@ export class Service {
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,
-            )
-            return true
+            );
+            return true;
         } catch (error) {
-            console.log("Appwrite Service :: deletePost :: error", error)
-            return false
+            console.error("Appwrite Service :: deletePost :: error", error);
+            return false;
         }
     }
 
@@ -72,10 +80,10 @@ export class Service {
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug
-            )
+            );
         } catch (error) {
-            console.log("Appwrite Service :: getPost :: error", error)
-            return false
+            console.error("Appwrite Service :: getPost :: error", error);
+            return false;
         }
     }
 
@@ -85,11 +93,10 @@ export class Service {
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 queries,
-
-            )
+            );
         } catch (error) {
-            console.log("Appwrite Service :: getPosts :: error", error)
-            return false
+            console.error("Appwrite Service :: getPosts :: error", error);
+            return false;
         }
     }
 
@@ -99,10 +106,10 @@ export class Service {
                 conf.appwriteBucketId,
                 ID.unique(),
                 file
-            )
+            );
         } catch (error) {
-            console.log("Appwrite Service :: uploadFile :: error", error)
-            return false
+            console.error("Appwrite Service :: uploadFile :: error", error);
+            return false;
         }
     }
 
@@ -111,22 +118,46 @@ export class Service {
             await this.bucket.deleteFile(
                 conf.appwriteBucketId,
                 fileId
-            )
-            return true
+            );
+            return true;
         } catch (error) {
-            console.log("Appwrite Service :: deletePost :: error", error)
-            return false
+            console.error("Appwrite Service :: deleteFile :: error", error);
+            return false;
         }
     }
 
     getFilePreview(fileId) {
-        return this.bucket.getFileView(
-            conf.appwriteBucketId,
-            fileId
-        )
+        if (!fileId) return "";
+        if (typeof fileId === "string" && (fileId.startsWith("http://") || fileId.startsWith("https://") || fileId.startsWith("data:"))) {
+            return fileId;
+        }
+        try {
+            return this.bucket.getFilePreview(
+                conf.appwriteBucketId,
+                fileId
+            ).toString();
+        } catch (error) {
+            console.error("Appwrite Service :: getFilePreview :: error", error);
+            return "";
+        }
+    }
+
+    getFileView(fileId) {
+        if (!fileId) return "";
+        if (typeof fileId === "string" && (fileId.startsWith("http://") || fileId.startsWith("https://") || fileId.startsWith("data:"))) {
+            return fileId;
+        }
+        try {
+            return this.bucket.getFileView(
+                conf.appwriteBucketId,
+                fileId
+            ).toString();
+        } catch (error) {
+            console.error("Appwrite Service :: getFileView :: error", error);
+            return "";
+        }
     }
 }
 
-
-const service = new Service()
-export default service
+const service = new Service();
+export default service;

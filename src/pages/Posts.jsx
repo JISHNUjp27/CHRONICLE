@@ -108,11 +108,21 @@ export default function Post() {
     };
 
     const handleShare = async () => {
-        if (navigator.clipboard) {
-            await navigator.clipboard.writeText(window.location.href);
-            toast.success("Story link copied to clipboard!");
-        } else {
-            toast.success("URL ready to share!");
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(window.location.href);
+                toast.success("Story link copied to clipboard!");
+            } else {
+                const dummy = document.createElement("input");
+                document.body.appendChild(dummy);
+                dummy.value = window.location.href;
+                dummy.select();
+                document.execCommand("copy");
+                document.body.removeChild(dummy);
+                toast.success("Story link copied to clipboard!");
+            }
+        } catch {
+            toast.success("Story link ready to share!");
         }
     };
 
@@ -149,7 +159,7 @@ export default function Post() {
                         <span>Back to feed</span>
                     </Link>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                         <button
                             onClick={handleShare}
                             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 backdrop-blur-md transition-all duration-300 hover:border-cyan-400/50 hover:text-cyan-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]"
@@ -175,6 +185,15 @@ export default function Post() {
                                     Delete
                                 </button>
                             </div>
+                        )}
+
+                        {!isAuthor && userData && (
+                            <Link
+                                to={`/edit-post/${post.$id}`}
+                                className="inline-flex items-center gap-1.5 rounded-full border border-violet-400/30 bg-violet-600/15 px-3.5 py-2 text-xs font-semibold text-violet-200 transition-all duration-300 hover:bg-violet-600/30 hover:border-violet-400/60"
+                            >
+                                <span>✦ Remix Story</span>
+                            </Link>
                         )}
                     </div>
                 </div>

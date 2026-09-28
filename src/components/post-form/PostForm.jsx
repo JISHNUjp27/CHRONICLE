@@ -33,6 +33,8 @@ function PostForm({ post }) {
     const userData = useSelector((state) => state.auth.userData);
     const [isLoading, setIsLoading] = useState(false);
     
+    const isCuratedOrNotAuthor = post && (post.userId === "editorial-staff" || (userData?.$id && post.userId !== userData.$id));
+
     // Image selection state
     const isUrlImage = post?.featuredImage && (post.featuredImage.startsWith("http://") || post.featuredImage.startsWith("https://"));
     const [imageMode, setImageMode] = useState(isUrlImage ? "url" : "presets");
@@ -104,7 +106,7 @@ function PostForm({ post }) {
                 category: data.category || "Engineering",
             };
 
-            if (post) {
+            if (post && !isCuratedOrNotAuthor) {
                 const dbPost = await appwriteService.updatePost(post.$id, postPayload);
 
                 if (dbPost) {
@@ -114,13 +116,19 @@ function PostForm({ post }) {
                     toast.error("Failed to update post. Please try again.");
                 }
             } else {
+                let submitSlug = postPayload.slug;
+                if (post && isCuratedOrNotAuthor && submitSlug === post.$id) {
+                    submitSlug = `${submitSlug.slice(0, 28)}-${Math.random().toString(36).slice(2, 6)}`;
+                }
+
                 const dbPost = await appwriteService.createPost({
                     ...postPayload,
+                    slug: submitSlug,
                     userId: userData?.$id || "anonymous-author"
                 });
 
                 if (dbPost) {
-                    toast.success("Story published to the feed!");
+                    toast.success(post ? "Story published to your feed as a new chronicle!" : "Story published to the feed!");
                     navigate(`/post/${dbPost.$id}`);
                 } else {
                     toast.error("Failed to publish post. Please check Appwrite permissions.");
@@ -140,7 +148,9 @@ function PostForm({ post }) {
                 .trim()
                 .toLowerCase()
                 .replace(/[^a-zA-Z\d\s]+/g, "-")
-                .replace(/\s+/g, "-");
+                .replace(/\s+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .slice(0, 36);
 
         return "";
     }, []);
@@ -161,7 +171,7 @@ function PostForm({ post }) {
                 <div className="border-b border-white/10 pb-5">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                            {post ? "Edit Article" : "Draft New Story"}
+                            {post ? (isCuratedOrNotAuthor ? "Duplicate & Publish Story" : "Edit Article") : "Draft New Story"}
                         </h2>
                         <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-300">
                             {wordCount} words · ~{readingTime} min read
@@ -336,10 +346,10 @@ function PostForm({ post }) {
                             {isLoading ? (
                                 <span className="inline-flex items-center gap-2">
                                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                                    {post ? "Updating story..." : "Publishing to feed..."}
+                                    {post && !isCuratedOrNotAuthor ? "Updating story..." : "Publishing to feed..."}
                                 </span>
                             ) : (
-                                <span>{post ? "Update Chronicle ✦" : "Publish Story ✦"}</span>
+                                <span>{post && !isCuratedOrNotAuthor ? "Update Chronicle ✦" : "Publish Story ✦"}</span>
                             )}
                         </Button>
                     </div>

@@ -73,10 +73,16 @@ function EditPosts() {
 
                     <Reveal delay={80}>
                         <h1 className="font-display mt-5 text-4xl font-extrabold sm:text-5xl text-white">
-                            Refine Your <span className="text-gradient">Story</span>
+                            {post.userId === "editorial-staff" ? (
+                                <>Remix & Publish <span className="text-gradient">Story</span></>
+                            ) : (
+                                <>Refine Your <span className="text-gradient">Story</span></>
+                            )}
                         </h1>
                         <p className="mx-auto mt-3 max-w-lg text-sm text-slate-300">
-                            Update your manuscript, change cover artwork, or alter status before returning to the collective feed.
+                            {post.userId === "editorial-staff"
+                                ? "Customize this editorial chronicle with your own thoughts and publish it to the live feed under your account."
+                                : "Update your manuscript, change cover artwork, or alter status before returning to the collective feed."}
                         </p>
                     </Reveal>
                 </div>
