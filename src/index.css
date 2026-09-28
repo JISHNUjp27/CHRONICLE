@@ -439,6 +439,116 @@ body {
   animation: shake-x 3.5s ease-in-out infinite;
 }
 
+/* -------------------------------------------------------- article typography -- */
+
+.prose-chronicle {
+  color: #cbd5e1;
+  font-size: 1.125rem;
+  line-height: 1.85;
+  letter-spacing: -0.01em;
+}
+
+.prose-chronicle h1,
+.prose-chronicle h2,
+.prose-chronicle h3,
+.prose-chronicle h4 {
+  font-family: "Sora", "Inter", system-ui, sans-serif;
+  color: #ffffff;
+  font-weight: 700;
+  margin-top: 2.4rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.25;
+}
+
+.prose-chronicle h1 { font-size: 2.25rem; }
+.prose-chronicle h2 { font-size: 1.75rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 0.5rem; }
+.prose-chronicle h3 { font-size: 1.35rem; color: #a78bfa; }
+.prose-chronicle h4 { font-size: 1.15rem; color: #67e8f9; }
+
+.prose-chronicle p {
+  margin-bottom: 1.5rem;
+}
+
+.prose-chronicle a {
+  color: #22d3ee;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.2s ease;
+}
+.prose-chronicle a:hover {
+  color: #a78bfa;
+}
+
+.prose-chronicle strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.prose-chronicle em {
+  color: #e2e8f0;
+}
+
+.prose-chronicle blockquote {
+  position: relative;
+  margin: 2rem 0;
+  padding: 1.2rem 1.6rem;
+  border-left: 3px solid #8b5cf6;
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), transparent);
+  border-radius: 0 16px 16px 0;
+  font-style: italic;
+  color: #e2e8f0;
+}
+
+.prose-chronicle ul {
+  list-style-type: disc;
+  padding-left: 1.6rem;
+  margin-bottom: 1.5rem;
+  space-y: 0.5rem;
+}
+
+.prose-chronicle ol {
+  list-style-type: decimal;
+  padding-left: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.prose-chronicle li {
+  margin-bottom: 0.4rem;
+}
+
+.prose-chronicle code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f472b6;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+.prose-chronicle pre {
+  margin: 1.8rem 0;
+  padding: 1.2rem 1.4rem;
+  background: #080a14;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  overflow-x: auto;
+}
+
+.prose-chronicle pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #e2e8f0;
+}
+
+.prose-chronicle img {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 2rem auto;
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -455,3 +565,4 @@ body {
     transform: none !important;
   }
 }
+

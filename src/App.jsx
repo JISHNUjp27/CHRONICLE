@@ -5,6 +5,7 @@ import authService from './appwrite/auth'
 import { login, logout } from './store/authSlice'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
+import GlowPointer from './components/GlowPointer'
 import { Outlet } from 'react-router-dom'
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
 
   return !loading ? (
     <div className='relative min-h-screen flex flex-wrap content-between bg-[#05060c] text-slate-100 selection:bg-violet-500/40'>
+      <GlowPointer />
+
       <div className='pointer-events-none fixed inset-0 -z-10 overflow-hidden'>
         <div className='orb orb-violet' style={{ width: '38rem', height: '38rem', top: '-12rem', left: '-10rem', opacity: 0.35 }} />
         <div className='orb orb-cyan' style={{ width: '30rem', height: '30rem', bottom: '-10rem', right: '-8rem', opacity: 0.28 }} />
