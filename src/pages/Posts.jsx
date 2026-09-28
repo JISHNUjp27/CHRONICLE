@@ -6,6 +6,8 @@ import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import useTilt from "../hooks/useTilt";
+import { getShowcasePost } from "../data/showcasePosts";
+import { resolveImageSource, handleImageError } from "../utils/imageHelper";
 
 function stripHtml(html = "") {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -58,14 +60,23 @@ export default function Post() {
                     if (postData) {
                         setPost(postData);
                     } else {
-                        toast.error("Story not found");
-                        navigate("/");
+                        const fallback = getShowcasePost(slug);
+                        if (fallback) {
+                            setPost(fallback);
+                        } else {
+                            toast.error("Story not found");
+                            navigate("/");
+                        }
                     }
                 })
-                .catch((err) => {
-                    console.error("Error fetching post:", err);
-                    toast.error("Failed to load article");
-                    navigate("/");
+                .catch(() => {
+                    const fallback = getShowcasePost(slug);
+                    if (fallback) {
+                        setPost(fallback);
+                    } else {
+                        toast.error("Failed to load article");
+                        navigate("/");
+                    }
                 })
                 .finally(() => setLoading(false));
         } else {
@@ -193,11 +204,12 @@ export default function Post() {
                             <span className="spotlight" />
                             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[22px] bg-[#05060c]">
                                 <img
-                                    src={appwriteService.getFilePreview(post.featuredImage)}
+                                    src={resolveImageSource(post.featuredImage, post.title || post.$id)}
                                     alt={post.title}
+                                    onError={(e) => handleImageError(e, post.title || post.$id)}
                                     className="h-full w-full object-cover"
                                 />
-                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#05060c]/60 via-transparent to-transparent" />
+                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#05060c]/40 via-transparent to-transparent" />
                             </div>
                         </div>
                     </div>
@@ -213,11 +225,11 @@ export default function Post() {
                     <div className="mt-14 border-t border-white/10 pt-8 flex flex-wrap items-center justify-between gap-6">
                         <div className="flex items-center gap-4">
                             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-cyan-400 font-display text-lg font-bold text-white shadow-[0_10px_25px_-10px_rgba(139,92,246,1)]">
-                                C
+                                {post.authorName ? post.authorName.charAt(0) : "C"}
                             </div>
                             <div>
-                                <p className="font-semibold text-white">Chronicle Author</p>
-                                <p className="text-xs text-slate-400">Published on Chronicle Decentralized Journal</p>
+                                <p className="font-semibold text-white">{post.authorName || "Chronicle Staff Writer"}</p>
+                                <p className="text-xs text-slate-400">{post.authorRole || "Published on Chronicle Journal"}</p>
                             </div>
                         </div>
 

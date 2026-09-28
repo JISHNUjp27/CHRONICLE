@@ -121,13 +121,32 @@ export class Service{
 
         getFilePreview(fileId){
             if (!fileId) return "";
+            if (typeof fileId === "string" && (fileId.startsWith("http://") || fileId.startsWith("https://") || fileId.startsWith("data:"))) {
+                return fileId;
+            }
             try {
                 return this.bucket.getFilePreview(
                     conf.appwriteBucketId,
                     fileId
-                )
+                ).toString();
             } catch (error) {
                 console.error("Appwrite Service :: getFilePreview :: error", error);
+                return "";
+            }
+        }
+
+        getFileView(fileId){
+            if (!fileId) return "";
+            if (typeof fileId === "string" && (fileId.startsWith("http://") || fileId.startsWith("https://") || fileId.startsWith("data:"))) {
+                return fileId;
+            }
+            try {
+                return this.bucket.getFileView(
+                    conf.appwriteBucketId,
+                    fileId
+                ).toString();
+            } catch (error) {
+                console.error("Appwrite Service :: getFileView :: error", error);
                 return "";
             }
         }
