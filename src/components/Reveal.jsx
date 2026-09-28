@@ -2,7 +2,7 @@ import React from "react";
 import useReveal from "../hooks/useReveal";
 
 function Reveal({
-  as: Tag = "div",
+  as,
   variant = "up",
   delay = 0,
   className = "",
@@ -12,16 +12,17 @@ function Reveal({
 }) {
   const [ref, visible] = useReveal();
   const revealClass = variant === "3d" ? "reveal-3d" : "reveal";
+  const Component = as || "div";
 
   return (
-    <Tag
+    <Component
       ref={ref}
       className={`${revealClass} ${visible ? "is-visible" : ""} ${className}`}
       style={{ "--reveal-delay": `${delay}ms`, ...style }}
       {...rest}
     >
       {children}
-    </Tag>
+    </Component>
   );
 }
 
